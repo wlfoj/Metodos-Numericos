@@ -1,77 +1,64 @@
-## Copyright (C) 2023 washi
-##
-## This program is free software: you can redistribute it and/or modify
-## it under the terms of the GNU General Public License as published by
-## the Free Software Foundation, either version 3 of the License, or
-## (at your option) any later version.
-##
-## This program is distributed in the hope that it will be useful,
-## but WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-## GNU General Public License for more details.
-##
-## You should have received a copy of the GNU General Public License
-## along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-## -*- texinfo -*-
-## @deftypefn {} {@var{retval} =} jacobi (@var{input1}, @var{input2})
-##
-## @seealso{}
-## @end deftypefn
-
-## Author: washi <washi@WASHINGTON-PC>
-## Created: 2023-10-04
+##Como tira a norma??
 
 #Matriz de coeficientes: [A]
 #Vetor independente: [b],
 #Tolerância: tol,
 #Numero máximo de iterações: N
-#Chute inicial: x(0) vetor inicial (0, 0, 0)
+#Chute inicial: x(0) vetor inicial [0; 0; 0]
 
 function retval = jacobi (A, b, tol, N, xo)
   # Testa a convergencia diagonal dominante aqui
-  # Testa a convergencia diagonal dominante aqui
+  #if diagonal_dominante(A) == 0
+  #  printf("O método não irá convergir\n");
+  #  return;
+  #endif
+  #
   normErx = inf;
   k = 1;
   [n, col_A] = size(A);
   C = zeros(n, n);
   d = zeros(n, 1);
-  x = xo;
+  #X = zeros(n, 1); # Vetor dos próximos valores
+  Xatual = xo;
+  Xanterior = xo;
 
+  ## Construindo C e d
   for i = 1:n #(linhas da matriz A)
     for j = 1:n #(colunas da matriz)
       if i == j
         C(i,j) = 0;
-        d(i,1) = b(i,1)/a(i,i);
+        d(i,1) = b(i,1)/A(i,i);
       else
-        C(i,j) = -a(i,j)/a(i,i);
+        C(i,j) = -A(i,j)/A(i,i);
       endif
     endfor
   endfor
-  x(0) = xo;
-  k = 1;
 
+  k = 1;
+  ## Fazendo as aproximações para os valores atuais de aproximação
+  while k<N && normErx > tol
+    Xatual = C * Xanterior + d; # Encontrando o proximo valor
+    # Calcula o erro
+    for i = 1:n
+      Erx(i) = abs((Xatual(i)- Xanterior(i))/Xatual(i)) * 100;
+    endfor
+    # Se já achei uma aproximação boa o suficiente
+    if max(Erx) <= tol
+      printf("A solução foi encontrada em %d iterações e com erro %d\n", k, max(Erx));
+      printf("O resultado foi:\n");
+      disp(Xatual);
+      return;
+    endif
+    # sigo procurando
+    k = k + 1;
+    normErx = max(Erx);#####???????
+    Xanterior = Xatual;
+  endwhile
+  # Veriifica se consegui resolver
+  if k = N
+    printf("Erro de convergência!\n");
+    disp(Xatual);
+  endif
 
 endfunction
 
-
-
-
-Enquanto k < N e normErx > tol faça
-x(k) = C * x(k-1) + d
-Para i = 1,..., n faça
-Erx(i) = abs((x(k) – x(k-1)
-)/x(k)
-) * 100
-
-fim Para
-Se max(Erx) < tol
-x(k) ← solução (retornar x, k, Erx), Parar!
-fim Se
-k = k + 1
-fim Enquanto
-Se k = N
-mensagem de erro de convergência !
-fim Se
-Saída: Valor das variáveis do sistema [x]
-Iterações, itr, erro Erx ou mensagem de erro
