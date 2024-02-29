@@ -1,4 +1,6 @@
-function retval = gaus_j_backup (A, b, i)
+
+
+function retval = gaus_pivo (A, b)
   #### Parte 1 ####
   fator = 0;
   # Obtendo dimensões de A
@@ -9,10 +11,7 @@ function retval = gaus_j_backup (A, b, i)
     return;
   endif
 
-  Ab = [A, i, b];# A matriz aumentada
-  printf("Matriz aumentada \n");
-  disp(Ab);
-  printf("\n");
+  Ab = [A, b];# A matriz aumentada
   # Para colunas
   for k = 1:(col_A-1)
     # Para linhas , tanto faz usar lin_A ou col_A já que é quadrada
@@ -30,29 +29,20 @@ function retval = gaus_j_backup (A, b, i)
       endif
       ## PARTE PIVO ##
 
-
-      ##### PARTE DE NORMALIZAÇÃO #####
-      printf("Operação de Normalização: L%d ← L%d/%d\n", ipr, ipr, Ab(ipr,ipr));
-      [maior,I] = max(abs(Ab(k:lin_A,k))); # Acho o maior elemento
-      ipr = I + k - 1;
-      Ab(ipr, :) = Ab(ipr, :) / Ab(ipr,ipr);
-      disp(Ab);
-      printf("\n");
-      ##### FIM PARTE DE NORMALIZAÇÃO #####
+      fator = A(i,k)/A(k,k);
 
       # Para visualizar melhor o processo
       printf("Operação realizada: L%d ← L%d -(%f)L%d\n", i,i,fator, k);
 
       ## Faço a operação na linha i para zerar algo nela
-      #for j = k : col_A
-      fator = Ab(i,k)/Ab(k,k);
-      Ab(i,:) = Ab(i,:) - (fator * Ab(k,:));
-      #endfor
+      for j = k : col_A
+        A(i,j) = A(i,j) - (fator * A(k,j));
+      endfor
       # Faço o mesmo processo da operação em b, pq considero a matriz aumentada
-      #b(i) = b(i) - fator * b(k);
+      b(i) = b(i) - fator * b(k);
 
       # Para visualizar melhor o processo
-      #Ab = [A, b];# A matriz aumentada
+      Ab = [A, b];# A matriz aumentada
       disp(Ab);
       printf("\n");
     endfor
@@ -62,13 +52,8 @@ function retval = gaus_j_backup (A, b, i)
   #### Parte 2 ####
   x = zeros(col_A, 1); # Inicializa vetor com os valores do resultado
   n = col_A;
-  #
-  A = Ab(1:lin_A, 1:3);
-  b = Ab(1:lin_A, 7);
+
   x(n) = b(n) / A(n,n);
-  # Obtebndo inversa
-  [lin_I, col_I] = size(i)
-  II = Ab(1:lin_A,   col_A+1:col_A+3);
   # Começo a resolver
   for i = n-1 : -1 : 1
     soma = b(i);
@@ -81,7 +66,5 @@ function retval = gaus_j_backup (A, b, i)
   # Para visualizar melhor o processo
   printf("Os valores dos parametros encontrados foram:\n");
   printf("x1=%f,  x2=%f,  x3=%f \n", x(1), x(2), x(3));
-  printf("A inversa é \n");
-  disp(II);
 
 endfunction

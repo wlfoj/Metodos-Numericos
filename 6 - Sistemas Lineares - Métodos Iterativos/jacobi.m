@@ -33,10 +33,18 @@ function retval = jacobi (A, b, tol, N, xo)
       endif
     endfor
   endfor
+  printf("A matriz C obtida:\n");
+  disp(C);
+  printf("\n\n");
+  printf("A matriz D obtida:\n");
+  disp(d);
+  printf("\n\n==========================Resolvendo============================\n\n");
 
   k = 1;
   ## Fazendo as aproximações para os valores atuais de aproximação
   while k<N && normErx > tol
+    texto = sprintf('Xatual = C*Xanterior + d = %s*%s + %s = %s\n', mat2str(C), mat2str(Xanterior), mat2str(d), mat2str(Xatual));
+    disp(texto);
     Xatual = C * Xanterior + d; # Encontrando o proximo valor
     # Calcula o erro
     for i = 1:n

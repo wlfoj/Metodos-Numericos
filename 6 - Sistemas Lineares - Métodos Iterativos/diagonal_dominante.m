@@ -1,3 +1,4 @@
+# Pego a diagonal e comparo com todos os elementos da linha dela, se a diagonal for maior, então é dominante
 
 ## Função que retorna 1 se a diagonal for a dominante e 0 se não for
 function retval = diagonal_dominante (A)
