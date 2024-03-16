@@ -1,5 +1,5 @@
 
-function retval = metodo_secante (xo, xant, e, N)
+function retval = metodo_secante (xo, xant, e, N, f)
   xn = xo;
   ##### Exibindo a evolução - Header da tabela
   fprintf("n    |  xprox  |    xr   |   ea   |  f(xprox)  \n");

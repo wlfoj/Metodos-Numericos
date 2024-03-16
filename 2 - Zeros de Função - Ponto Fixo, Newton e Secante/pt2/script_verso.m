@@ -7,7 +7,7 @@ df = @(x) 9.2*exp(-x) + 0.1*(sec(0.1*x))^2;
 
 g = @(x) x - (f(x)/df(x));
 # obtendo o valor da raiz para g(x)
-iteracao_linear(g, 0, 10^(-4), 100)
+iteracao_linear(g, 0, 10^(-4), 100, f)
 
 
 

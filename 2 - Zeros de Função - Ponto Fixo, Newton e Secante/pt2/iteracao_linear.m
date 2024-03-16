@@ -1,5 +1,5 @@
 
-function retval = iteracao_linear (g,xo, e, N)
+function retval = iteracao_linear (g,xo, e, N, f)
   #Se a magnitude do valor da derivada de g(x) no ponto for >1, irá divergir
   #if abs(dg(xo)) > 1
    # printf("O método irá divergir");

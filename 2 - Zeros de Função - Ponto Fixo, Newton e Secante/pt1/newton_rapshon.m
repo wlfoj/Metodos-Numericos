@@ -1,5 +1,5 @@
 
-function retval = newton_rapshon (xo, e, N)
+function retval = newton_rapshon (xo, e, N, f, df)
   xn = xo;
   ##### Exibindo a evolução - Header da tabela
   fprintf("n    |  xprox  |    xr   |   ea   |  f(xprox)  \n");
